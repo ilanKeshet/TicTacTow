@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,10 +9,11 @@ import tictactoe.PlayerX;
 
 public class ButtonListener implements ActionListener {
 
+	public static final int NUMBER_OF_BUTTONS = 9;
 	private PlayerX playerX;
 	private PlayerO playerO;
-	
-	
+
+
 	public PlayerO getPlayerO() {
 		return this.playerO;
 	}
@@ -24,214 +26,124 @@ public class ButtonListener implements ActionListener {
 	public void setPlayerX(PlayerX playerX) {
 		this.playerX = playerX;
 	}
-	
-	public ButtonListener(PlayerX playerX, PlayerO playerO) {
 
-		super();
+	public ButtonListener(PlayerX playerX, PlayerO playerO) {
 		this.setPlayerX(playerX);
 		this.setPlayerO(playerO);
 	}
+
+	/*
+	 * | 0 | 1 | 2 |
+	 * | 3 | 4 | 5 |
+	 * | 6 | 7 | 8 |
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		char aktuellesZeichen = 'o';
-		if(playerX.isNowPlays()){
-			aktuellesZeichen = 'x';
-		}
-			
-		((Button)e.getSource()).setText("    " + String.valueOf(aktuellesZeichen).toUpperCase() + "    ");
-		((Button)e.getSource()).setxOrO(aktuellesZeichen);
-			
-	
-			switch (((Button)e.getSource()).getActionCommand()){
-				case "button1": {
-					System.out.println("works");
-					if((((Button)((Button)e.getSource()).getParent().getComponent(1)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen) ||
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(3)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
+		char aktuellesZeichen = playerX.isNowPlays() ? 'x' : 'o';
 
-					break;
+		Button source = (Button)e.getSource();
+		source.setText("    " + String.valueOf(aktuellesZeichen).toUpperCase() + "    ");
+		source.setxOrO(aktuellesZeichen);
+
+		Container parent = source.getParent();
+		boolean isWin = false;
+		String buttonActionCommand = source.getActionCommand();
+		switch (buttonActionCommand){
+			case "button1": {
+				System.out.println("works");
+				if( 	isItWiningMove(aktuellesZeichen, parent, 1, 2)
+					||	isItWiningMove(aktuellesZeichen, parent, 4, 8)
+					||	isItWiningMove(aktuellesZeichen, parent, 3, 6) ) {
+					isWin = true;
 				}
-				case "button2":{
-					if((((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()== aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(7)).getxOrO()==aktuellesZeichen) ||
-							(((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen &&
-							((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				}
-				case "button3":{
-					if((((Button)((Button)e.getSource()).getParent().getComponent(1)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(5)).getxOrO()==aktuellesZeichen &&
-							((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen) ||
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()=='x')){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				}
-				case "button4":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(5)).getxOrO()==aktuellesZeichen)){
-						
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				case "button5":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(3)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(5)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(1)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(7)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				case "button6":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(3)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				case "button7":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(3)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(7)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				case "button8":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(8)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(1)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-				case "button9":
-					if((((Button)((Button)e.getSource()).getParent().getComponent(6)).getxOrO()==aktuellesZeichen && 
-					((Button)((Button)e.getSource()).getParent().getComponent(7)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(4)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(0)).getxOrO()==aktuellesZeichen) || 
-							(((Button)((Button)e.getSource()).getParent().getComponent(5)).getxOrO()==aktuellesZeichen && 
-							((Button)((Button)e.getSource()).getParent().getComponent(2)).getxOrO()==aktuellesZeichen)){
-						System.out.println("Player " + aktuellesZeichen + " wins");
-						((Button)((Button)e.getSource()).getParent().getComponent(0)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(1)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(2)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(3)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(4)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(5)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(6)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(7)).setEnabled(false);
-						((Button)((Button)e.getSource()).getParent().getComponent(8)).setEnabled(false);
-					}
-
-					break;
-					
-				default: {
-//					System.out.println("no");
-					break;
-				}
+				break;
 			}
-			
-			((Button)e.getSource()).setEnabled(false);
+			case "button2":{
+				if(		isItWiningMove(aktuellesZeichen, parent, 4, 7)
+					||	isItWiningMove(aktuellesZeichen, parent, 0, 2) ) {
+					isWin = true;
+				}
+				break;
+			}
+			case "button3":{
+				if( 	isItWiningMove(aktuellesZeichen, parent, 1, 0)
+					||	isItWiningMove(aktuellesZeichen, parent, 5, 8)
+					||	isItWiningMove(aktuellesZeichen, parent, 4, 6) ) {
+					isWin = true;
+				}
+				break;
+			}
+			case "button4":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 6, 0)
+					||	isItWiningMove(aktuellesZeichen, parent, 5, 4) ) {
+					isWin = true;
+				}
+				break;
+			case "button5":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 3, 5)
+					||	isItWiningMove(aktuellesZeichen, parent, 0, 8)
+					||	isItWiningMove(aktuellesZeichen, parent, 1, 7)
+					||	isItWiningMove(aktuellesZeichen, parent, 2, 6) ) {
+					isWin = true;
+				}
+				break;
+			case "button6":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 4, 3)
+					||	isItWiningMove(aktuellesZeichen, parent, 2, 8) ) {
+					isWin = true;
+				}
+				break;
+			case "button7":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 3, 0)
+					||	isItWiningMove(aktuellesZeichen, parent, 7, 8)
+					||	isItWiningMove(aktuellesZeichen, parent, 4, 2) ) {
+					isWin = true;
+				}
+				break;
+			case "button8":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 1, 4)
+					||	isItWiningMove(aktuellesZeichen, parent, 8, 6) ) {
+					isWin = true;
+				}
+				break;
+			case "button9":
+				if( 	isItWiningMove(aktuellesZeichen, parent, 4, 0)
+					||	isItWiningMove(aktuellesZeichen, parent, 5, 2)
+					||	isItWiningMove(aktuellesZeichen, parent, 7, 6) ) {
+					isWin = true;
+				}
+				break;
+
+			default: {
+				throw new IllegalStateException("should never get here! unknown button '" + buttonActionCommand + "'");
+			}
+		}
+
+		if(isWin) {
+			System.out.println("Player " + aktuellesZeichen + " wins");
+			dsiableAll(parent);
+		} else {
+			source.setEnabled(false);
 			playerO.setNowPlays(!playerO.isNowPlays());
-			playerX.setNowPlays(!playerX.isNowPlays());			
+			playerX.setNowPlays(!playerX.isNowPlays());
+		}
+
+	}
+
+	private void dsiableAll(Container parent) {
+		for (int i = 0 ; i < NUMBER_OF_BUTTONS ; i++) {
+			Button button = (Button)parent.getComponent(i);
+			button.setEnabled(false);
 		}
 	}
+
+	private boolean isItWiningMove(char aktuellesZeichen, Container parent, int neighbor1, int neighbor2){
+		Button button1 = (Button)parent.getComponent(neighbor1);
+		Button button2 = (Button)parent.getComponent(neighbor2);
+
+		boolean result = aktuellesZeichen == button1.getxOrO() && aktuellesZeichen == button2.getxOrO();
+
+		return result;
+	}
+}
 
